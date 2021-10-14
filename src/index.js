@@ -6,7 +6,6 @@ const photo = document.getElementById("photo");
 const resultSection = document.getElementById("result-section");
 const typesElm = document.getElementById("types");
 const brotherSection = document.getElementById("brother");
-const loader = loaderMaker();
 const fail = () => {
   alert("Oops, something went wrong...");
 };
@@ -18,15 +17,10 @@ async function searchHandler() {
     }
     if (!userInput.value) fail();
     else {
-      document.body.append(loader);
       const jsonAns = await fetch(
         `https://pokeapi.co/api/v2/pokemon/${userInput.value}`
-      ).catch(() => {
-        loader.remove();
-      });
-      const ans = await jsonAns.json().finally(() => {
-        loader.remove();
-      });
+      );
+      const ans = await jsonAns.json();
       nameElm.innerHTML = `<b>name: </b>${ans.name}`;
       weightElm.innerHTML = `<b>weight: </b>${ans.weight}`;
       heightElm.innerHTML = `<b>height: </b>${ans.height}`;
@@ -101,14 +95,5 @@ async function viewBrothers(event) {
 function presentNewPokemon(event) {
   userInput.value = event.target.innerHTML;
   brotherSection.innerHTML = "";
-  document.body.append(loader);
-  searchHandler().finally(() => {
-    loader.remove();
-  });
-}
-
-function loaderMaker() {
-  const loader = document.createElement("div");
-  loader.classList.add("loader");
-  return loader;
+  searchHandler();
 }
