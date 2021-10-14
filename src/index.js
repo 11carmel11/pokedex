@@ -1,3 +1,4 @@
+// general variables:
 const userInput = document.getElementById("search-query");
 const nameElm = document.getElementById("pokéName");
 const weightElm = document.getElementById("weight");
@@ -6,10 +7,12 @@ const photo = document.getElementById("photo");
 const resultSection = document.getElementById("result-section");
 const typesElm = document.getElementById("types");
 const brotherSection = document.getElementById("brother");
+//alert fail
 const fail = () => {
   alert("Oops, something went wrong...");
 };
 
+// search the requested pokemon
 async function searchHandler() {
   try {
     if (!resultSection.getAttribute("hidden")) {
@@ -36,24 +39,28 @@ async function searchHandler() {
   }
 }
 
+// shows the back of the pokemon
 function flipPhotoToBack() {
   if (!photo.src) return;
   const pokéId = getIdFromSrc();
   photo.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${pokéId}.png`;
 }
 
+// takes url and extract the id
 function getIdFromSrc() {
   const arr = photo.src.split("/");
   const lastPartOfSrc = arr[arr.length - 1].split(".");
   return lastPartOfSrc[0];
 }
 
+// shows the front of the pokemon
 function flipPhotoToFront() {
   if (!photo.src) return;
   const pokéId = getIdFromSrc();
   photo.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokéId}.png`;
 }
 
+// extracts the types of the pokemon and append them in place
 function buildTypesRow(obj) {
   typesElm.innerHTML = "";
   for (let type of obj.types) {
@@ -65,7 +72,7 @@ function buildTypesRow(obj) {
     );
   }
 }
-
+// creates general element
 function createElement(type, str, atrs = {}) {
   const element = document.createElement(type);
   element.innerHTML = str;
@@ -75,6 +82,7 @@ function createElement(type, str, atrs = {}) {
   return element;
 }
 
+// appends the brothers of the pokemon
 async function viewBrothers(event) {
   try {
     const arr = [];
@@ -83,7 +91,7 @@ async function viewBrothers(event) {
     const response = await jsonResponse.json();
     for (let pokemon of response.pokemon) {
       arr.push(
-        `<li onclick="presentNewPokemon(event)" class="point">${pokemon.pokemon.name}</li>`
+        `<li onclick="presentNewPokemon(event)" class="point brother">${pokemon.pokemon.name}</li>`
       );
     }
     brotherSection.innerHTML = arr.join("<br>");
@@ -92,8 +100,11 @@ async function viewBrothers(event) {
   }
 }
 
+// present the selected brother as main pokemon
 function presentNewPokemon(event) {
   userInput.value = event.target.innerHTML;
   brotherSection.innerHTML = "";
-  searchHandler();
+  searchHandler().finally(() => {
+    userInput.value = "";
+  });
 }
