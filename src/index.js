@@ -6,6 +6,7 @@ const photo = document.getElementById("photo");
 const resultSection = document.getElementById("result-section");
 const typesElm = document.getElementById("types");
 const brotherSection = document.getElementById("brother");
+const loader = loaderMaker();
 const fail = () => {
   alert("Oops, something went wrong...");
 };
@@ -15,12 +16,17 @@ async function searchHandler() {
     if (!resultSection.getAttribute("hidden")) {
       resultSection.setAttribute("hidden", true);
     }
-    const jsonAns = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${userInput.value}`
-    );
     if (!userInput.value) fail();
     else {
-      const ans = await jsonAns.json();
+      document.body.append(loader);
+      const jsonAns = await fetch(
+        `https://pokeapi.co/api/v2/pokemon/${userInput.value}`
+      ).catch(() => {
+        loader.remove();
+      });
+      const ans = await jsonAns.json().finally(() => {
+        loader.remove();
+      });
       nameElm.innerHTML = `<b>name: </b>${ans.name}`;
       weightElm.innerHTML = `<b>weight: </b>${ans.weight}`;
       heightElm.innerHTML = `<b>height: </b>${ans.height}`;
@@ -60,16 +66,17 @@ function buildTypesRow(obj) {
     typesElm.append(
       createElement("button", type.type.name, {
         onclick: "viewBrothers(event)",
+        class: "point",
       })
     );
   }
 }
 
-function createElement(type, str, events = {}) {
+function createElement(type, str, atrs = {}) {
   const element = document.createElement(type);
   element.innerHTML = str;
-  for (let event in events) {
-    element.setAttribute(event, events[event]);
+  for (let atr in atrs) {
+    element.setAttribute(atr, atrs[atr]);
   }
   return element;
 }
@@ -82,7 +89,7 @@ async function viewBrothers(event) {
     const response = await jsonResponse.json();
     for (let pokemon of response.pokemon) {
       arr.push(
-        `<li onclick="presentNewPokemon(event)">${pokemon.pokemon.name}</li>`
+        `<li onclick="presentNewPokemon(event)" class="point">${pokemon.pokemon.name}</li>`
       );
     }
     brotherSection.innerHTML = arr.join("<br>");
@@ -94,5 +101,14 @@ async function viewBrothers(event) {
 function presentNewPokemon(event) {
   userInput.value = event.target.innerHTML;
   brotherSection.innerHTML = "";
-  searchHandler();
+  document.body.append(loader);
+  searchHandler().finally(() => {
+    loader.remove();
+  });
+}
+
+function loaderMaker() {
+  const loader = document.createElement("div");
+  loader.classList.add("loader");
+  return loader;
 }
