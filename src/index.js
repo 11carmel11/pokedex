@@ -15,6 +15,7 @@ const fail = () => {
 // search the requested pokemon
 async function searchHandler() {
   try {
+    brotherSection.innerHTML = "";
     if (!resultSection.getAttribute("hidden")) {
       resultSection.setAttribute("hidden", true);
     }
@@ -85,16 +86,19 @@ function createElement(type, str, atrs = {}) {
 // appends the brothers of the pokemon
 async function viewBrothers(event) {
   try {
-    const arr = [];
     const text = event.target.innerHTML;
     const jsonResponse = await fetch(`https://pokeapi.co/api/v2/type/${text}`);
     const response = await jsonResponse.json();
+    brotherSection.innerHTML = "";
     for (let pokemon of response.pokemon) {
-      arr.push(
-        `<li onclick="presentNewPokemon(event)" class="point brother">${pokemon.pokemon.name}</li>`
+      brotherSection.append(
+        createElement("li", pokemon.pokemon.name, {
+          onclick: "presentNewPokemon(event)",
+          class: "point brother",
+        })
       );
+      brotherSection.append(createElement("br"));
     }
-    brotherSection.innerHTML = arr.join("<br>");
   } catch (error) {
     fail();
   }
