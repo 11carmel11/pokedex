@@ -7,6 +7,7 @@ const photo = document.getElementById("photo");
 const resultSection = document.getElementById("result-section");
 const typesElm = document.getElementById("types");
 const brotherSection = document.getElementById("brother");
+
 //alert fail
 const fail = () => {
   alert("Oops, something went wrong...");
