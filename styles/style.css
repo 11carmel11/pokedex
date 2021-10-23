@@ -22,3 +22,11 @@ html {
   background-color: lightcoral;
   margin-bottom: 3px;
 }
+.error {
+  background-color: cyan;
+}
+.mine {
+  display: inline-block;
+  background-color: rgb(67, 163, 158);
+  margin-bottom: 3px;
+}

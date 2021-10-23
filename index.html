@@ -13,6 +13,7 @@
       <br />
       <input id="search-query" type="text" placeholder="enter name/number..." />
       <button id="search-button" onclick="searchHandler()">Search!</button>
+      <button id="listShower" onclick="showList()">show my Pokédex</button>
     </section>
     <section id="result-section" hidden="true">
       <p id="pokéName"></p>
@@ -23,14 +24,18 @@
         <p id="types"></p
       ></b>
       <img
-        id="photo"
+        id="front-photo"
         src=""
         alt="pokémon picture"
         onmouseenter="flipPhotoToBack()"
         onmouseleave="flipPhotoToFront()"
       />
+      <button id="catch" onclick="catchPoke()">catch</button>
+      <button id="release" onclick="releasePoke()">release</button>
     </section>
     <section id="brother"></section>
-    <script src="src/index.js"></script>
+    <section id="mine"></section>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="src/index.js" defer></script>
   </body>
 </html>
