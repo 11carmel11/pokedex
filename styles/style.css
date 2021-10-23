@@ -1,0 +1,32 @@
+#search-section {
+  color: chocolate;
+  text-align: center;
+  border: 5px double coral;
+  padding: 10px;
+  margin-left: 37vw;
+  margin-right: 37vw;
+  background-color: khaki;
+}
+html {
+  background: url(./assets/pokeballsvg.png) no-repeat center center fixed;
+}
+
+#result-section {
+  color: rgb(136, 35, 35);
+}
+.point {
+  cursor: pointer;
+}
+.brother {
+  display: inline-block;
+  background-color: lightcoral;
+  margin-bottom: 3px;
+}
+.error {
+  background-color: cyan;
+}
+.mine {
+  display: inline-block;
+  background-color: rgb(67, 163, 158);
+  margin-bottom: 3px;
+}
